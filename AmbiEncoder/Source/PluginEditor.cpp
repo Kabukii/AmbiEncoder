@@ -27,10 +27,17 @@
 //[/MiscUserDefs]
 
 //==============================================================================
-PluginEditor::PluginEditor ()
+AmbiEncoderAudioProcessorEditor::AmbiEncoderAudioProcessorEditor (AmbiEncoderAudioProcessor& p)
+    : AudioProcessorEditor(p), processor(p)
 {
     //[Constructor_pre] You can add your own custom stuff here..
     //[/Constructor_pre]
+
+    addAndMakeVisible (sliderPanPosition = new Slider ("new slider"));
+    sliderPanPosition->setRange (0, 360, 0);
+    sliderPanPosition->setSliderStyle (Slider::Rotary);
+    sliderPanPosition->setTextBoxStyle (Slider::TextBoxBelow, false, 80, 20);
+    sliderPanPosition->addListener (this);
 
 
     //[UserPreSize]
@@ -40,14 +47,16 @@ PluginEditor::PluginEditor ()
 
 
     //[Constructor] You can add your own custom stuff here..
+    startTimer(200);//starts timer with interval of 200mS
     //[/Constructor]
 }
 
-PluginEditor::~PluginEditor()
+AmbiEncoderAudioProcessorEditor::~AmbiEncoderAudioProcessorEditor()
 {
     //[Destructor_pre]. You can add your own custom destruction code here..
     //[/Destructor_pre]
 
+    sliderPanPosition = nullptr;
 
 
     //[Destructor]. You can add your own custom destruction code here..
@@ -55,7 +64,7 @@ PluginEditor::~PluginEditor()
 }
 
 //==============================================================================
-void PluginEditor::paint (Graphics& g)
+void AmbiEncoderAudioProcessorEditor::paint (Graphics& g)
 {
     //[UserPrePaint] Add your own custom painting code here..
     //[/UserPrePaint]
@@ -66,18 +75,40 @@ void PluginEditor::paint (Graphics& g)
     //[/UserPaint]
 }
 
-void PluginEditor::resized()
+void AmbiEncoderAudioProcessorEditor::resized()
 {
     //[UserPreResize] Add your own custom resize code here..
     //[/UserPreResize]
 
+    sliderPanPosition->setBounds (16, 16, 136, 120);
     //[UserResized] Add your own custom resize handling here..
     //[/UserResized]
+}
+
+void AmbiEncoderAudioProcessorEditor::sliderValueChanged (Slider* sliderThatWasMoved)
+{
+    //[UsersliderValueChanged_Pre]
+    //[/UsersliderValueChanged_Pre]
+
+    if (sliderThatWasMoved == sliderPanPosition)
+    {
+        //[UserSliderCode_sliderPanPosition] -- add your slider handling code here..
+        processor.panPosition = sliderPanPosition->getValue();
+        //[/UserSliderCode_sliderPanPosition]
+    }
+
+    //[UsersliderValueChanged_Post]
+    //[/UsersliderValueChanged_Post]
 }
 
 
 
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
+void AmbiEncoderAudioProcessorEditor::timerCallback()
+{
+    //exchange any data you want between UI elements and the Plugin "ourProcessor"
+}
+
 //[/MiscUserCode]
 
 
@@ -90,11 +121,16 @@ void PluginEditor::resized()
 
 BEGIN_JUCER_METADATA
 
-<JUCER_COMPONENT documentType="Component" className="PluginEditor" componentName=""
-                 parentClasses="public Component" constructorParams="" variableInitialisers=""
+<JUCER_COMPONENT documentType="Component" className="AmbiEncoderAudioProcessorEditor"
+                 componentName="" parentClasses="public AudioProcessorEditor, public Timer"
+                 constructorParams="AmbiEncoderAudioProcessor&amp; p" variableInitialisers="AudioProcessorEditor(p), processor(p)"
                  snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330"
                  fixedSize="0" initialWidth="600" initialHeight="400">
   <BACKGROUND backgroundColour="ffffffff"/>
+  <SLIDER name="new slider" id="78c9cdbad904ed06" memberName="sliderPanPosition"
+          virtualName="" explicitFocusOrder="0" pos="16 16 136 120" min="0"
+          max="360" int="0" style="Rotary" textBoxPos="TextBoxBelow" textBoxEditable="1"
+          textBoxWidth="80" textBoxHeight="20" skewFactor="1" needsCallback="1"/>
 </JUCER_COMPONENT>
 
 END_JUCER_METADATA

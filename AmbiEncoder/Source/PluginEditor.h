@@ -17,11 +17,12 @@
   ==============================================================================
 */
 
-#ifndef __JUCE_HEADER_F1B68972952BE4__
-#define __JUCE_HEADER_F1B68972952BE4__
+#ifndef __JUCE_HEADER_B83E78229194344C__
+#define __JUCE_HEADER_B83E78229194344C__
 
 //[Headers]     -- You can add your own extra header files here --
 #include "../JuceLibraryCode/JuceHeader.h"
+#include "../Source/PluginProcessor.h"
 //[/Headers]
 
 
@@ -34,34 +35,40 @@
     Describe your class and how it works here!
                                                                     //[/Comments]
 */
-class PluginEditor  : public Component
+class AmbiEncoderAudioProcessorEditor  : public AudioProcessorEditor,
+                                         public Timer,
+                                         public SliderListener
 {
 public:
     //==============================================================================
-    PluginEditor ();
-    ~PluginEditor();
+    AmbiEncoderAudioProcessorEditor (AmbiEncoderAudioProcessor& p);
+    ~AmbiEncoderAudioProcessorEditor();
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
+    void timerCallback();
     //[/UserMethods]
 
     void paint (Graphics& g) override;
     void resized() override;
+    void sliderValueChanged (Slider* sliderThatWasMoved) override;
 
 
 
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
+    AmbiEncoderAudioProcessor& processor;
     //[/UserVariables]
 
     //==============================================================================
+    ScopedPointer<Slider> sliderPanPosition;
 
 
     //==============================================================================
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PluginEditor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AmbiEncoderAudioProcessorEditor)
 };
 
 //[EndFile] You can add extra defines here...
 //[/EndFile]
 
-#endif   // __JUCE_HEADER_F1B68972952BE4__
+#endif   // __JUCE_HEADER_B83E78229194344C__

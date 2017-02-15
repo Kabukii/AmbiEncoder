@@ -9,7 +9,7 @@
 */
 
 #include "PluginProcessor.h"
-#include "PluginEditor.h"
+
 
 
 //==============================================================================
@@ -125,6 +125,7 @@ void AmbiEncoderAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuf
 {
     const int totalNumInputChannels  = getTotalNumInputChannels();
     const int totalNumOutputChannels = getTotalNumOutputChannels();
+    const int numSamples = buffer.getNumSamples();
 
     // In case we have more outputs than inputs, this code clears any output
     // channels that didn't contain input data, (because these aren't
@@ -137,6 +138,22 @@ void AmbiEncoderAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuf
 
     // This is the place where you'd normally do the guts of your plugin's
     // audio processing...
+    float azimuth = (3.141592/180.f) * panPosition;
+    
+    //Get Pointer to each of the Ambisonic channels
+    float* channelDataW = buffer.getWritePointer(0);
+    float* channelDataX = buffer.getWritePointer(1);
+    float* channelDataY = buffer.getWritePointer(2);
+    float* channelDataZ = buffer.getWritePointer(3);
+    
+    for (int i = 0; i < numSamples; i++){
+        float audioIn = channelDataW[i];
+        
+        channelDataW[i] = audioIn * 0.707;
+        channelDataX[i] = audioIn * cos(azimuth);
+        channelDataY[i] = audioIn * sin(azimuth);
+    }
+    
     for (int channel = 0; channel < totalNumInputChannels; ++channel)
     {
         float* channelData = buffer.getWritePointer (channel);
