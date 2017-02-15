@@ -152,6 +152,7 @@ void AmbiEncoderAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuf
         channelDataW[i] = audioIn * 0.707;
         channelDataX[i] = audioIn * cos(azimuth);
         channelDataY[i] = audioIn * sin(azimuth);
+        //missing line for height (z)
     }
     
     for (int channel = 0; channel < totalNumInputChannels; ++channel)

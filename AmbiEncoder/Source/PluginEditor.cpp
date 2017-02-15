@@ -39,6 +39,12 @@ AmbiEncoderAudioProcessorEditor::AmbiEncoderAudioProcessorEditor (AmbiEncoderAud
     sliderPanPosition->setTextBoxStyle (Slider::TextBoxBelow, false, 80, 20);
     sliderPanPosition->addListener (this);
 
+    addAndMakeVisible (sliderHeightPosition = new Slider ("new slider"));
+    sliderHeightPosition->setRange (0, 180, 0);
+    sliderHeightPosition->setSliderStyle (Slider::Rotary);
+    sliderHeightPosition->setTextBoxStyle (Slider::TextBoxBelow, false, 80, 20);
+    sliderHeightPosition->addListener (this);
+
 
     //[UserPreSize]
     //[/UserPreSize]
@@ -57,6 +63,7 @@ AmbiEncoderAudioProcessorEditor::~AmbiEncoderAudioProcessorEditor()
     //[/Destructor_pre]
 
     sliderPanPosition = nullptr;
+    sliderHeightPosition = nullptr;
 
 
     //[Destructor]. You can add your own custom destruction code here..
@@ -81,6 +88,7 @@ void AmbiEncoderAudioProcessorEditor::resized()
     //[/UserPreResize]
 
     sliderPanPosition->setBounds (16, 16, 136, 120);
+    sliderHeightPosition->setBounds (192, 16, 136, 120);
     //[UserResized] Add your own custom resize handling here..
     //[/UserResized]
 }
@@ -95,6 +103,12 @@ void AmbiEncoderAudioProcessorEditor::sliderValueChanged (Slider* sliderThatWasM
         //[UserSliderCode_sliderPanPosition] -- add your slider handling code here..
         processor.panPosition = sliderPanPosition->getValue();
         //[/UserSliderCode_sliderPanPosition]
+    }
+    else if (sliderThatWasMoved == sliderHeightPosition)
+    {
+        //[UserSliderCode_sliderHeightPosition] -- add your slider handling code here..
+        processor.heightPosition = sliderHeightPosition->getValue();
+        //[/UserSliderCode_sliderHeightPosition]
     }
 
     //[UsersliderValueChanged_Post]
@@ -130,6 +144,10 @@ BEGIN_JUCER_METADATA
   <SLIDER name="new slider" id="78c9cdbad904ed06" memberName="sliderPanPosition"
           virtualName="" explicitFocusOrder="0" pos="16 16 136 120" min="0"
           max="360" int="0" style="Rotary" textBoxPos="TextBoxBelow" textBoxEditable="1"
+          textBoxWidth="80" textBoxHeight="20" skewFactor="1" needsCallback="1"/>
+  <SLIDER name="new slider" id="ee927b45a83ef515" memberName="sliderHeightPosition"
+          virtualName="" explicitFocusOrder="0" pos="192 16 136 120" min="0"
+          max="180" int="0" style="Rotary" textBoxPos="TextBoxBelow" textBoxEditable="1"
           textBoxWidth="80" textBoxHeight="20" skewFactor="1" needsCallback="1"/>
 </JUCER_COMPONENT>
 

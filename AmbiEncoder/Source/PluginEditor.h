@@ -62,6 +62,7 @@ private:
 
     //==============================================================================
     ScopedPointer<Slider> sliderPanPosition;
+    ScopedPointer<Slider> sliderHeightPosition;
 
 
     //==============================================================================
